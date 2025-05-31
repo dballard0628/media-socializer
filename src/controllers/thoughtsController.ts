@@ -44,9 +44,12 @@ export const createThought = async (req: Request, res: Response) => {
       { new: true }
     );
 
-    if (!user) {
-      return res.status(404).json({ message: 'Thought created, but no user found with that ID' });
-    }
+   if (!user) {
+  res.status(404).json({ message: 'No user with that ID' });
+  return;
+}
+res.status(200).json(user);
+
 
     return res.status(201).json({ message: 'Thought created successfully 🎉' });
   } catch (err) {

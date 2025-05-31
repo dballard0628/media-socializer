@@ -1,15 +1,15 @@
-import moment from 'moment';
-import mongoose, { Schema, model } from 'mongoose';
-const reactionSchema = new Schema({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = require("mongoose");
+const reactionSchema = new mongoose_1.Schema({
     reactionId: {
-        type: Schema.Types.ObjectId,
-        default: () => new mongoose.Types.ObjectId(),
+        type: mongoose_1.Schema.Types.ObjectId,
+        default: () => new mongoose_1.Types.ObjectId()
     },
     reactionBody: {
         type: String,
         required: true,
-        minLength: 1,
-        maxLength: 280
+        maxlength: 280
     },
     username: {
         type: String,
@@ -17,21 +17,30 @@ const reactionSchema = new Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now,
-        get: (timestamp) => moment(timestamp).format('MMMM Do YYYY, h:mm:ss a'),
+        default: Date.now
     }
+}, {
+    toJSON: {
+        getters: true,
+        transform: function (_doc, ret) {
+            if (ret.createdAt) {
+                ret.createdAt = ret.createdAt.toLocaleDateString();
+            }
+            return ret;
+        }
+    },
+    id: false
 });
-const thoughtSchema = new Schema({
+const thoughtSchema = new mongoose_1.Schema({
     thoughtText: {
         type: String,
         required: true,
-        minLength: 1,
-        maxLength: 280
+        minlength: 1,
+        maxlength: 280
     },
     createdAt: {
         type: Date,
-        default: Date.now,
-        get: (timestamp) => moment(timestamp).format('MMMM Do YYYY, h:mm:ss a'),
+        default: Date.now
     },
     username: {
         type: String,
@@ -41,15 +50,19 @@ const thoughtSchema = new Schema({
 }, {
     toJSON: {
         virtuals: true,
-        getters: true
+        getters: true,
+        transform: function (_doc, ret) {
+            if (ret.createdAt) {
+                ret.createdAt = ret.createdAt.toLocaleDateString();
+            }
+            return ret;
+        }
     },
     id: false
 });
-thoughtSchema
-    .virtual('reactionCount')
-    .get(function () {
-    return this.reactions?.length;
+// Create a virtual property `reactionCount` that gets the length of the thought's reactions array
+thoughtSchema.virtual('reactionCount').get(function () {
+    return this.reactions.length;
 });
-// Initialize our Post model
-const Thought = model('thoughts', thoughtSchema);
-export default Thought;
+const Thought = (0, mongoose_1.model)('Thought', thoughtSchema);
+exports.default = Thought;
