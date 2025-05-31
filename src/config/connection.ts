@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/defaultdb';
+dotenv.config();
+
+const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/socialnetwork';
 
 mongoose.connect(mongoURI);
 
 const db = mongoose.connection;
-
-db.on('error', (error) => console.error('MongoDB connection error:', error));
-db.once('open', () => console.log('MongoDB connected'));
 
 export default db;

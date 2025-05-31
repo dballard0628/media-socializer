@@ -1,6 +1,6 @@
 import { Router } from 'express';
 const router = Router();
-import { getSingleThought, getThoughts, createThought, updateThought, deleteThought, createReaction, deleteReaction } from '../../controllers/thoughtsController.js';
+import { getSingleThought, getThoughts, createThought, updateThought, deleteThought, createReaction, deleteReaction } from '../../controllers/thoughtsController';
 
 // Async handler to catch errors and avoid returning a value from controllers
 const asyncHandler = (fn: any) => (req: any, res: any, next: any) => {
